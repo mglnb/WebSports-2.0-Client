@@ -61,7 +61,7 @@ export default {
   },
   async handleDelete(payload) {
     this.$Progress.start()
-    await this.$http.delete(`https://websports.herokuapp.com/api/reservas/${payload.target.id}`)
+    await this.$http.delete(`//websports.herokuapp.com/api/reservas/${payload.target.id}`)
     this.$store.dispatch("load-reservas");
     this.$Progress.finish()
   }

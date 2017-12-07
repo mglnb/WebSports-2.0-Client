@@ -77,7 +77,7 @@ Vue.http.interceptors.push(function(request, next) {
 router.beforeEach((to, from, next) => {
 
   Vue.http
-    .get("https://websports.herokuapp.com/api/user")
+    .get("//websports.herokuapp.com/api/user")
     .then(response => {
     })
     .catch(error => {
