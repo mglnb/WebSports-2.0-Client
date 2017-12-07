@@ -57,7 +57,7 @@ export default {
       }
       console.log(data)
 
-      this.$http.put('http://localhost:8000/api/clientes/' + payload.data.id, data).then((response) => {console.log('response', response);})
+      this.$http.put('http://websports.herokuapp.com/api/clientes/' + payload.data.id, data).then((response) => {console.log('response', response);})
       this.$store.dispatch("load-clientes");
     },
     handleCreate(payload) {
@@ -73,7 +73,7 @@ export default {
         saldo: payload['Saldo']
       }
 
-      this.$http.post('http://localhost:8000/api/clientes', data)
+      this.$http.post('http://websports.herokuapp.com/api/clientes', data)
 
       this.$store.dispatch("load-clientes");
 
