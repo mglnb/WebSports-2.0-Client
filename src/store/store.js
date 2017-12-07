@@ -31,7 +31,7 @@ const mutations = {
 const actions = {
   'load-clientes' (context) {
     let clientes
-    Vue.http.get('http://websports.herokuapp.com/api/clientes')
+    Vue.http.get('https://websports.herokuapp.com/api/clientes')
       .then(response => {
         let res = response
         clientes = res.data.map(element => {
@@ -51,7 +51,7 @@ const actions = {
       })
   },
   'load-users' (context) {
-    Vue.http.get('http://websports.herokuapp.com/api/users')
+    Vue.http.get('https://websports.herokuapp.com/api/users')
       .then(response => {
         let users = response.data.map(element => {
           return {
@@ -65,7 +65,7 @@ const actions = {
       })
   },
   'load-reservas' (context) {
-    Vue.http.get('http://websports.herokuapp.com/api/reservas')
+    Vue.http.get('https://websports.herokuapp.com/api/reservas')
       .then(response => {
         let reservas = response.data.map(element => {
           return {
@@ -79,7 +79,7 @@ const actions = {
       })
   },
   'load-reserva' (context, id) {
-    Vue.http.get(`http://websports.herokuapp.com/api/reservas/${id}`)
+    Vue.http.get(`https://websports.herokuapp.com/api/reservas/${id}`)
       .then(response => {
         let reserva = response.data
         console.log('reserva load')
@@ -90,7 +90,7 @@ const actions = {
     let column = user.column
     let data = {}
     data[column] = user.value
-    Vue.http.put(`http://websports.herokuapp.com/api/users/${user.id}`, data)
+    Vue.http.put(`https://websports.herokuapp.com/api/users/${user.id}`, data)
       .then(response => {
         console.log(response.status)
       })
@@ -107,7 +107,7 @@ const actions = {
     } else {
       data[column] = reserva.value
     }
-    Vue.http.put(`http://websports.herokuapp.com/api/reservas/${reserva.id}`, data)
+    Vue.http.put(`https://websports.herokuapp.com/api/reservas/${reserva.id}`, data)
       .then(response => {
         console.log(response.status)
       })
@@ -129,14 +129,14 @@ const actions = {
       data[column.toLowerCase()] = cliente.value
     }
     console.log(data)
-    Vue.http.put(`http://websports.herokuapp.com/api/clientes/${cliente.id}`, data)
+    Vue.http.put(`https://websports.herokuapp.com/api/clientes/${cliente.id}`, data)
       .then(response => {
         console.log(response.status)
       })
 
   },
   'create-users' (context, users) {
-    Vue.http.post('http://websports.herokuapp.com/api/users', users)
+    Vue.http.post('https://websports.herokuapp.com/api/users', users)
       .then(response => {
         console.log(response.status)
       })

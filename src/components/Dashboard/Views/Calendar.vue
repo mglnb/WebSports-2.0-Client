@@ -107,7 +107,7 @@ export default {
       this.$Progress.start()
       console.log(e);
       let reserva;
-      await this.$http.get(`http://websports.herokuapp.com/api/reservas/${e.id}`).then(res => {
+      await this.$http.get(`https://websports.herokuapp.com/api/reservas/${e.id}`).then(res => {
         console.log(res.body)
         reserva = res.body;
       });
@@ -123,7 +123,7 @@ export default {
       console.log(e)
       this.reserva.cliente.cpf = this.reserva.cliente.cpf.replace(/[^a-zA-Z0-9 ]/g, "")
       this.reserva.cliente.saldo = this.reserva.cliente.saldo.replace(/[^0-9 ]/g, "")
-      await this.$http.put(`http://websports.herokuapp.com/api/reservas/${this.id}`, this.reserva)
+      await this.$http.put(`https://websports.herokuapp.com/api/reservas/${this.id}`, this.reserva)
       e.target.setAttribute("readonly", true);
       this.$store.dispatch("load-reservas");
 
