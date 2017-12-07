@@ -3,7 +3,7 @@
 
   <div class="col-md-12">
     <div class="card card-plain">
-      <paper-table @update="handleUpdate"  type="hover" :title="table.title" :sub-title="table.subTitle" :data="clientes" :columns="table.columns">
+      <paper-table @createSubmit="handleCreate" @update="handleUpdate"  type="hover" :title="table.title" :sub-title="table.subTitle" :data="clientes" :columns="table.columns">
 
       </paper-table>
     </div>
@@ -13,8 +13,8 @@
 </template>
 <script>
 import PaperTable from "components/UIComponents/PaperTable.vue";
-const tableColumns = [{name: "Nome do Cliente"}, {name:"Endereço"},
- {name:"CPF", mask: ['###.###.###-##', '##.###.###/####-##']}, {name:"Saldo", mask: ['R$ ###,##']}];
+const tableColumns = [{name: "Nome do Cliente"}, {name: 'Email', type:'email'}, {name:"Endereço"},
+ {name:"CPF", mask: '###.###.###-##'}, {name:"Saldo", mask: 'R$ ###,##'}];
 
 export default {
   created() {
@@ -37,24 +37,46 @@ export default {
         "nome"
       );
       console.log(payload.data);
+      let data;
       if (payload.data.column == "Endereço") {
         payload.data.rua = payload.data.value.split(",")[0];
         payload.data.numero = payload.data.value.split(",")[1].trim();
         payload.data.complemento =
-          payload.data.value.split(",")[2].trim() || "";
+        payload.data.value.split(",")[2].trim() || "";
+        data = {
+          endereco : {
+            rua: payload.data.rua,
+            numero : payload.data.numero,
+            complemento: payload.data.complemento
+          }
+        }
+      } else {
+        data = {
+          [payload.data.column.toLowerCase()] : payload.data.value
+        }
       }
+      console.log(data)
 
-      this.$store.dispatch("update-clientes", payload.data);
+      this.$http.put('http://localhost:8000/api/clientes/' + payload.data.id, data).then((response) => {console.log('response', response);})
       this.$store.dispatch("load-clientes");
     },
     handleCreate(payload) {
-      //       let data = {
-      //   name: payload["Nome do Usuario"],
-      //   email: payload["Email"],
-      //   password: payload["Senha"]
-      // }
-      // this.$store.dispatch("create-users", data)
-      // this.$store.dispatch("load-users");
+      let data = {
+        nome: payload['Nome do cliente'],
+        email: payload['Email'],
+        endereco : {
+          rua: payload['Endereço'].split(",")[0],
+          numero : payload['Endereço'].split(",")[1] || '',
+          complemento: payload['Endereço'].split(",")[2] || ''
+        },
+        cpf: payload['CPF'],
+        saldo: payload['Saldo']
+      }
+
+      this.$http.post('http://localhost:8000/api/clientes', data)
+
+      this.$store.dispatch("load-clientes");
+
     }
   },
   mounted() {
@@ -66,7 +88,7 @@ export default {
         title: "Listagem de Clientes",
         subTitle:
           "Para qualquer alteração, clique duas vezes em cima do registro",
-        columns: [...tableColumns]
+        columns: [tableColumns]
       }
     };
   }

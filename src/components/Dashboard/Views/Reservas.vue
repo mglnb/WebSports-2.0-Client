@@ -32,7 +32,7 @@ export default {
       return this.$store.state.reservas
     },
     clientes() {
-      return this.$store.state.clientes;
+      return this.$store.state.clientes.map((value,index) => value['nome do cliente']);
     }
   },
   methods: {
@@ -76,7 +76,7 @@ export default {
       table: {
         title: "Listagem de Reservas",
         subTitle: "Para qualquer alteração, clique duas vezes em cima do registro",
-        columns: [...tableColumns]
+        columns: [tableColumns]
       }
     }
   }
