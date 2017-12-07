@@ -1,7 +1,7 @@
 <template>
   <div>
   <login
-    api-url="http://websports.herokuapp.com"
+    api-url="https://websports.herokuapp.com"
     clientId="2"
     secret="n5JYhuh7qmmkmU2ofxIY618zuJ35qzQj6ezshpUm"
 
