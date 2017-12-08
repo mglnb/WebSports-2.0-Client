@@ -3069,91 +3069,97 @@ td input {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.flex {
+  display: -ms-flexbox;
+  display: flex;
+}
+.reserva {
+  position: fixed;
+  height: 100vh;
+  right: 0;
+  top: 0;
+  transform: translateX(35vw);
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+      flex-direction: column;
+  width: 35vw;
+  z-index: 9000;
+  background: rgba(255, 255, 255, 0.97);
+  padding: 30px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+&\--closed {
+    animation: translateX-reverse .4s forwards;
+}
+&\--active {
+    animation: translateX .4s forwards;
+}
+&\--column {display: -ms-flexbox;display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: center;
+        align-items: center;
+    -ms-flex-pack: center;
+        justify-content: center;
+    width: 100%
+}
+&__header {
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    margin-bottom: 40px;
+    -ms-flex-pack: justify;
+        justify-content: space-between;
+}
+&__title {
+    margin: 0 auto;
+    font-size: 1.8em;
+}
+&__close {
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.8em;
+}
+&__input-group {
+    -ms-flex: 1;
+        flex: 1;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+        flex-direction: column;
+    -ms-flex-align: baseline;
+        align-items: baseline;
+    border-bottom: 1px solid rgba(50,50,50,.1);
+    margin-bottom: 10px;
+    width: 100%;
+label {
+      text-align: right;
+      margin-right: 20px;
+}
+input {
+      text-align: left;
+      padding-left: 0;
+      color: #444;
+      font-weight: 400;
+}
+}
+}
+@keyframes translateX {
+0% {
+      transform: translateX(35vw);
+}
+100% {
+      transform: translateX(0);
+}
+}
+@keyframes translateX-reverse {
+0% {
+    transform:  translateX(0);
+}
+100% {
+      transform:  translateX(35vw);
+}
+}
 
 
 
@@ -14447,4 +14453,4 @@ textarea.form-control {
 .ti-rss-alt:before {
   content: "\E75F"; }
 
-/*# sourceMappingURL=app.6f4474de76334367f0e0365538e6214e.css.map*/
+/*# sourceMappingURL=app.093d2d52fc2bd58be61a3ec1db47af9c.css.map*/
