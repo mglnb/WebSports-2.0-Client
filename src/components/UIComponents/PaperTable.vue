@@ -116,9 +116,9 @@ export default {
         column: column
       };
       this.$emit("update", {
+        e,
         data
       });
-      e.target.setAttribute("readonly", "true");
     },
     create(e) {
       this.classCreate = this.toggleCreate ?
@@ -128,10 +128,10 @@ export default {
       this.$emit("create", e);
     },
     view(e) {
-
+      this.$emit('view', e.target.parentNode.offsetParent.id || e.path[2].id)
     },
     remove(e) {
-     this.$emit('delete', e)
+     this.$emit('delete', e.target.parentNode.offsetParent.id || e.path[2].id)
     },
     createSubmit(e) {
       this.classCreate = "table-create closed";

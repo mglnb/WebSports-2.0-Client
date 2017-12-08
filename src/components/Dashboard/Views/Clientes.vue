@@ -3,13 +3,22 @@
 
   <div class="col-md-12">
     <div class="card card-plain">
-      <paper-table @create="cliente_class = 'cliente--active'" @update="handleUpdate" type="hover" :title="table.title" :sub-title="table.subTitle" :data="clientes" :columns="table.columns">
+      <paper-table
+          @view="handleView"
+          @delete="handleDelete"
+          @create="cliente_class = 'cliente--active'"
+          @update="handleUpdate"
+          type="hover"
+          :title="table.title"
+          :sub-title="table.subTitle"
+          :data="clientes"
+          :columns="table.columns">
 
       </paper-table>
       <div class="cliente" :class="cliente_class">
         <div class="cliente__header">
           <div class="cliente--column">
-            <span class="cliente__title">Edição de cliente</span>
+            <span class="cliente__title">Criação de cliente</span>
             <span class="cliente__subtitle">Dê dois cliques no campo para editar e enter para salvar</span>
           </div>
           <span class="ti-close cliente__close" @click.stop="cliente_class = 'cliente--closed'"></span>
@@ -110,7 +119,8 @@ export default {
     }
   },
   methods: {
-    handleUpdate(payload) {
+    async handleUpdate(payload) {
+      this.$Progress.start()
       payload.data.column = payload.data.column.replace(
         "Nome do Cliente",
         "nome"
@@ -134,14 +144,49 @@ export default {
         }
       }
 
-      this.$http.put('//websports.herokuapp.com/api/clientes/' + payload.data.id, data).then((response) => {
-      })
+      await this.$http.put('//websports.herokuapp.com/api/clientes/' + payload.data.id, data)
+              .then((response) => {this.$Progress.finish()})
+              .catch((err) => {this.$Progress.fail()})
+
+      payload.e.target.setAttribute('readonly', 'true')
       this.$store.dispatch("load-clientes");
     },
-    handleCreate(payload) {
-      console.log(payload)
-      this.$http.post('//websports.herokuapp.com/api/clientes', this.cliente)
+    async handleCreate(payload) {
+      this.$Progress.start()
+      await this.$http.post('//websports.herokuapp.com/api/clientes', this.cliente)
+              .then(res => {this.$Progress.finish()})
+              .catch(err => {this.$Progress.fail()})
       this.$store.dispatch("load-clientes");
+    },
+    async handleDelete(payload) {
+      this.$Progress.start()
+      await this.$http.delete(`//websports.herokuapp.com/api/clientes/${payload}`)
+            .then(res => {this.$Progress.finish()})
+            .catch(err => {this.$Progress.fail(); console.log(err)})
+      this.$store.dispatch("load-clientes")
+    },
+    async handleView(payload) {
+      this.$Progress.start()
+
+      await this.$http.get(`//websports.herokuapp.com/api/clientes/${payload}`)
+            .then(res => {
+              this.cliente = {
+                nome: res.data.nome || '',
+                email: res.data.email || '',
+                cep: '',
+                endereco: {
+                  rua: res.data.endereco.rua || '',
+                  numero: res.data.endereco.numero || '',
+                  complemento: res.data.endereco.complemento ||''
+                },
+                cpf: res.data.cpf || '',
+                saldo: res.data.saldo || '',
+              }
+              this.$Progress.finish()
+            })
+            .catch(err => {this.$Progress.fail(); console.log(err)})
+            this.cliente_class = "cliente--active"
+
     },
     findCep() {
       axios.get(`http://viacep.com.br/ws/${this.cliente.cep}/json/`)
@@ -176,7 +221,7 @@ export default {
     display: flex;
     &.flex-row {
       flex-direction: row;
-      
+
       input:first-child {
         width: 50%
       }
@@ -227,7 +272,7 @@ export default {
       text-align: right;
       margin-right: 20px;
       color: #444 !important;
-      font-weight: bold !important; 
+      font-weight: bold !important;
     }
     input {
       border: none;

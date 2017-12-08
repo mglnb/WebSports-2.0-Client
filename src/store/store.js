@@ -72,7 +72,9 @@ const actions = {
             'id': element.id,
             'nome do cliente': element.cliente.nome,
             'dia': new Date(element.dataReservada).toLocaleDateString() + " " + new Date(element.dataReservada).toLocaleTimeString(),
-            'reservas': '1'
+            'reservas': '1',
+            'pago' : element.pagamento.dataPagamento ? "✓" : "✕",
+            'quadra' : element.quadra.id
           }
         })
         context.commit('set-reservas', reservas)
