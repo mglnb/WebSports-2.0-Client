@@ -8,7 +8,7 @@
     </slot>
   </div>
   <div class="content table-responsive table-full-width">
-    <table class="table" :class="tableClass">
+    <!-- <table class="table" :class="tableClass">
       <tr :class="classCreate">
         <td v-for="column in columns[0]" @keypress.enter="createSubmit($event)" :key="column.id">
             <v-select v-if="column.type == 'select'" v-model="clientSelected" :options="subData"></v-select>
@@ -16,7 +16,7 @@
             <input required :data-column="column.name" :type="column.type" v-else :placeholder="column.name" />
         </td>
       </tr>
-    </table>
+    </table> -->
     <table class="table" :class="tableClass">
       <thead>
         <th v-for="column in columns[0]" @click="setSort(column.name)" :key="column.id">{{column.name}} <span :class="sortOrder ? 'ti-arrow-up' : 'ti-arrow-down'"></span> </th>
