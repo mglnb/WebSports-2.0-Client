@@ -52,9 +52,10 @@
               <input type="text" placeholder="Complemento" v-model="cliente.endereco.complemento">
             </div>
           </div>
-           <div class="">
-            <button @click="handleCreate($event)">ENVIAR</button>
-          </div>
+        <div class="reserva__button-group">
+          <button @click.prevent="handleCreate($event)">Enviar</button>
+          <button @click.prevent="resetFields($event)">Limpar</button>
+        </div>
         </div>
       </div>
     </div>
