@@ -36,7 +36,7 @@
             </label>
           </div>
           <div class="reserva__button-group">
-            <button>Enviar</button>
+            <button @click.prevent="handleCreate($event)">Enviar</button>
             <button @click.prevent="resetFields($event)">Limpar</button>
           </div>
         </div>
@@ -183,7 +183,22 @@ export default {
       payload.e.target.setAttribute("readonly", "true");
       this.$store.dispatch("load-reservas");
     },
-    async handleCreate(payload) {
+    async handleCreate(payload = '') {
+      if (payload.target.localName == "button") {
+        this.$Progress.start();
+        console.log(this.reserva)
+        await this.$http
+          .post(`//websports.herokuapp.com/api/reservas`, this.reserva)
+          .then(response => {
+            this.$Progress.finish();
+          })
+          .catch(err => {
+            console.error(err)
+            this.$Progress.fail();
+          });
+        return
+      }
+
       this.reserva_isCreate = true;
       this.reserva_class = "reserva--active"
 

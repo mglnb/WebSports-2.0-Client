@@ -73,6 +73,7 @@ export default {
       this.$http.post(this.loginUrl, postData)
         .then(res=> {
           localStorage['token'] = JSON.stringify(res.body)
+          localStorage['user'] = JSON.stringify({username: this.login.user})
           let authUser = {
             user: this.login.user,
             token: res.data.access_token,
