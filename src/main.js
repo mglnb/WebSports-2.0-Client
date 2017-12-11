@@ -22,7 +22,8 @@ import {
   VueMaskDirective
 } from "v-mask";
 import VueProgressBar from 'vue-progressbar'
-
+import VuePaginate from 'vue-paginate'
+Vue.use(VuePaginate)
 
 window._ = _;
 // plugin setup

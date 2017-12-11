@@ -95,6 +95,9 @@ export default {
         this.usuario_class = "usuario--active"
         return
       }
+      if(this.usuario.name == "" || this.usuario.email == "" || this.usuario.password == "") {
+        return
+      }
       this.$Progress.start()
       await this.$http.post('//websports.herokuapp.com/api/users', this.usuario)
         .then(res => {
@@ -103,6 +106,7 @@ export default {
         .catch(err => {
           this.$Progress.fail()
         })
+        this.resetFields();
       this.$store.dispatch('load-users')
     },
     async handleDelete(payload) {
@@ -117,8 +121,21 @@ export default {
       this.$store.dispatch('load-users')
 
     },
-    handleView(payload) {
-
+    async handleView(payload) {
+      this.$Progress.start()
+      await this.$http.get(`//websports.herokuapp.com/api/users/${payload}`)
+                    .then(res => {
+                      this.usuario = {
+                        name: res.body.name,
+                        email: res.body.email,
+                        password: '*********'
+                      }
+                      this.$Progress.finish()
+                    })
+                    .catch(err => {
+                      this.$Progress.fail()
+                    })
+      this.usuario_class = "usuario--active"      
     },
     resetFields(e) {
       if (e.target.localName == "span") {

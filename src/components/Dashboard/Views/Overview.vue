@@ -1,9 +1,8 @@
 <template>
   <div>
 
-    Stats cards
     <div class="row">
-      <div class="col-lg-3 col-sm-6" v-for="stats in statsCards">
+      <div class="col-lg-3 col-sm-6" :key="stats.id" v-for="stats in statsCards">
         <stats-card>
           <div class="icon-big text-center" :class="`icon-${stats.type}`" slot="header">
             <i :class="stats.icon"></i>
@@ -19,7 +18,7 @@
       </div>
     </div>
 
-    <!--Charts-->
+    <!--Charts
     <div class="row">
 
       <div class="col-xs-12">
@@ -49,17 +48,16 @@
           </div>
         </chart-card>
       </div>
-
-      <div class="col-md-6 col-xs-12">
+-->
+      <div class="col-md-12 col-xs-12">
         <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options">
-          <h4 class="title" slot="title">2015 Sales</h4>
-          <span slot="subTitle"> All products including Taxes</span>
-          <span slot="footer">
-            <i class="ti-check"></i> Data information certified</span>
-          <div slot="legend">
+          <h4 class="title" slot="title">Reservas deste ano</h4>
+         <!-- <span slot="footer">
+            <i class="ti-check"></i> Data information certified</span> -->
+          <!-- <div slot="legend">
             <i class="fa fa-circle text-info"></i> Tesla Model S
-            <i class="fa fa-circle text-warning"></i> BMW 5 Series
-          </div>
+            <i class="fa fa-circle text-warning"></i> BMW 5 Series 
+          </div>-->
         </chart-card>
       </div>
 
@@ -82,35 +80,39 @@
       return {
         statsCards: [
           {
-            type: 'warning',
-            icon: 'ti-server',
-            title: 'Capacity',
-            value: '105GB',
-            footerText: 'Updated now',
+            id: 1,
+            type: 'success',
+            icon: 'ti-user',
+            title: 'Total de Clientes',
+            value: '0',
+            footerText: 'Atualizado agora',
             footerIcon: 'ti-reload'
           },
           {
+            id: 2,
             type: 'success',
-            icon: 'ti-wallet',
-            title: 'Revenue',
-            value: '$1,345',
-            footerText: 'Last day',
-            footerIcon: 'ti-calendar'
+            icon: 'ti-calendar',
+            title: 'Total de Reservas',
+            value: '0',
+            footerText: 'Atualizado agora',
+            footerIcon: 'ti-reload'
           },
           {
-            type: 'danger',
-            icon: 'ti-pulse',
-            title: 'Errors',
-            value: '23',
-            footerText: 'In the last hour',
-            footerIcon: 'ti-timer'
-          },
-          {
+            id: 3,
             type: 'info',
-            icon: 'ti-twitter-alt',
-            title: 'Followers',
+            icon: 'ti-calendar',
+            title: 'Reservas desse mês',
+            value: '+23',
+            footerText: 'Atualizado agora',
+            footerIcon: 'ti-reload'
+          },
+          {
+            id: 4,
+            type: 'info',
+            icon: 'ti-user',
+            title: 'Clientes desse mês',
             value: '+45',
-            footerText: 'Updated now',
+            footerText: 'Atualizado agora',
             footerIcon: 'ti-reload'
           }
         ],
@@ -140,14 +142,13 @@
         },
         activityChart: {
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
             series: [
-              [542, 543, 520, 680, 653, 753, 326, 434, 568, 610, 756, 895],
-              [230, 293, 380, 480, 503, 553, 600, 664, 698, 710, 736, 795]
+              [10, 20, 15, 18, 10, 25, 23, 40, 20, 18, 32, 18]
             ]
           },
           options: {
-            seriesBarDistance: 10,
+            seriesBarDistance: 40,
             axisX: {
               showGrid: false
             },
@@ -163,6 +164,26 @@
         }
 
       }
+    },
+    created() {
+      this.$Progress.start();
+      this.$http.get('//websports.herokuapp.com/api/relatorios')
+           .then(res => {
+             this.statsCards[0].value = res.body.clientes;
+             this.statsCards[1].value = res.body.reservas;
+             this.$Progress.finish()
+           })
+           .catch(err => {
+             this.statsCards.map((value, index) => {
+               value.type = 'danger'
+               value.footerText = 'Erro ao carregar'
+               value.footerIcon = 'ti-error'
+             })
+             this.$Progress.fail();
+           })
+    },
+    computed: {
+
     }
   }
 
