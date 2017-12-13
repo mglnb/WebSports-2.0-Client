@@ -28,11 +28,7 @@ const SidebarStore = {
       icon: 'ti-timer',
       path: '/admin/reservas'
     },
-    {
-      name: 'Relatórios',
-      icon: 'ti-stats-up',
-      path: '/admin/relatorios'
-    },
+
     {
       name: 'Sair',
       icon: 'ti-power-off',

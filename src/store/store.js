@@ -73,7 +73,7 @@ const actions = {
             'nome do cliente': element.cliente.nome,
             'dia': new Date(element.dataReservada).toLocaleDateString() + " " + new Date(element.dataReservada).toLocaleTimeString(),
             'reservas': '1',
-            'pago' : element.pagamento.dataPagamento ? "✓" : "✕",
+            'pago' : element.pagamento.id == 1 ? "✕" : "✓",
             'quadra' : element.quadra.id
           }
         })

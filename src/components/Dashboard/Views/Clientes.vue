@@ -1,10 +1,10 @@
 <template>
   <div class="row">
-  
+
     <div class="col-md-12">
       <div class="card card-plain">
         <paper-table @view="handleView" @delete="handleDelete" @create="cliente_class = 'cliente--active'" @update="handleUpdate" type="hover" :title="table.title" :sub-title="table.subTitle" :data="clientes" :columns="table.columns">
-  
+
         </paper-table>
         <div class="cliente" :class="cliente_class">
           <div class="cliente__header">
@@ -19,23 +19,30 @@
               <input type="text" v-model="cliente.nome">
             </div>
             <div class="flex flex-row">
-  
+
               <div class="cliente__input-group">
                 <label for="">E-MAIL</label>
                 <input type="text" v-model="cliente.email">
               </div>
               <div class="cliente__input-group">
                 <label for="">CPF</label>
-                <input type="text" v-model="cliente.cpf" v-mask="['###.###.###-##']">
+                <input type="text" v-model="cliente.cpf" >
               </div>
             </div>
             <div class="cliente__input-group">
               <label for="">SALDO</label>
-              <input type="text" v-model="cliente.saldo" v-mask="['R$ ###,00']">
+              <input type="text" v-model="cliente.saldo" >
             </div>
+            <div class="flex flex-row">
+
             <div class="cliente__input-group">
               <label for="">CEP</label>
-              <input type="text" @blur="findCep" v-mask="['#####-###']" v-model="cliente.cep">
+              <input type="text" @blur="findCep" v-mask="['#####-###']" v-model="cliente.endereco.cep">
+            </div>
+              <div class="cliente__input-group">
+                <label for="">CIDADE</label>
+                <input type="text"  v-model="cliente.endereco.cidade">
+              </div>
             </div>
             <div class="cliente__input-group">
               <label for="">Endereço</label>
@@ -53,7 +60,7 @@
         </div>
       </div>
     </div>
-  
+
   </div>
 </template>
 
@@ -76,7 +83,7 @@
       mask: 'R$ ###,##'
     }
   ];
-  
+
   export default {
     data() {
       return {
@@ -89,14 +96,15 @@
         cliente: {
           nome: '',
           email: '',
-          cep: '',
           endereco: {
             rua: '',
             numero: '',
-            complemento: ''
+            complemento: '',
+            cidade: '',
+            cep: ''
           },
           cpf: '',
-          saldo: '',
+          saldo: ''
         }
       };
     },
@@ -107,7 +115,7 @@
     components: {
       PaperTable
     },
-  
+
     computed: {
       clientes() {
         return this.$store.state.clientes;
@@ -138,7 +146,7 @@
             [payload.data.column.toLowerCase()]: payload.data.value
           }
         }
-  
+
         await this.$http.put('//websports.herokuapp.com/api/clientes/' + payload.data.id, data)
           .then((response) => {
             this.$Progress.finish()
@@ -146,7 +154,7 @@
           .catch((err) => {
             this.$Progress.fail()
           })
-  
+
         payload.e.target.setAttribute('readonly', 'true')
         this.$store.dispatch("load-clientes");
       },
@@ -175,7 +183,7 @@
       },
       async handleView(payload) {
         this.$Progress.start()
-  
+
         await this.$http.get(`//websports.herokuapp.com/api/clientes/${payload}`)
           .then(res => {
             this.cliente = {
@@ -197,15 +205,17 @@
             console.log(err)
           })
         this.cliente_class = "cliente--active"
-  
+
       },
       findCep() {
-        axios.get(`http://viacep.com.br/ws/${this.cliente.cep}/json/`)
+        axios.get(`http://viacep.com.br/ws/${this.cliente.endereco.cep}/json/`)
           .then(response => {
             this.cliente.endereco = {
               rua: response.data.logradouro,
               complemento: response.data.complemento,
-              numero: ''
+              numero: '',
+              cep: this.cliente.endereco.cep,
+              cidade: response.data.localidade
             }
           })
       }
@@ -232,16 +242,7 @@
       display: flex;
       &.flex-row {
         flex-direction: row;
-        input:first-child {
-          width: 50%
-        }
-        input:nth-child(2) {
-          margin: 0 10px;
-          width: 25%;
-        }
-        input:last-child {
-          width: 25%;
-        }
+
       }
     }
     &--closed {
@@ -295,7 +296,7 @@
       }
     }
   }
-  
+
   @keyframes translateX {
     0% {
       transform: translateX(35vw);
@@ -304,7 +305,7 @@
       transform: translateX(0);
     }
   }
-  
+
   @keyframes translateX-reverse {
     0% {
       transform: translateX(0);

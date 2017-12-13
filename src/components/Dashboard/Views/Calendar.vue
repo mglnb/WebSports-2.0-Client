@@ -29,6 +29,11 @@
         <input type="text" readonly @keydown.enter="addReadonly($event)" @dblclick="edit($event)" v-mask="['R$ ###,00']" v-model="reserva.cliente.saldo">
       </div>
       <div class="reserva__input-group">
+        <label>PAGO?
+          <input type="checkbox" :checked="reserva.pagamento" @change="addReadonly($event)" v-model="reserva.pagamento" >
+        </label>
+      </div>
+      <div class="reserva__input-group">
         <label for="">RESERVADO PARA</label>
         <input type="text" readonly @keydown.enter="addReadonly($event)" @dblclick="edit($event)" v-model="reserva.dataReservada">
       </div>
@@ -64,6 +69,7 @@ export default {
           nome: "",
           saldo: ""
         },
+        pagamento: '',
         dataReservada: "",
         created_at: "",
         updated_at: ""
@@ -109,11 +115,11 @@ export default {
     async handleClick(e) {
       this.id = e.id
       this.$Progress.start()
-      console.log(e);
       let reserva;
       await this.$http.get(`//websports.herokuapp.com/api/reservas/${e.id}`).then(res => {
         console.log(res.body)
         reserva = res.body;
+        reserva.pagamento = res.body.pagamento_id != 1
       });
       this.reserva = reserva;
       this.$Progress.finish()
@@ -127,10 +133,11 @@ export default {
       this.$Progress.start()
       this.reserva.cliente.cpf = this.reserva.cliente.cpf.replace(/[^a-zA-Z0-9 ]/g, "")
       this.reserva.cliente.saldo = this.reserva.cliente.saldo.replace(/[^0-9 ]/g, "")
+      this.reserva.pagamento_id = this.reserva.pagamento ? 2 : 1
       await this.$http.put(`//websports.herokuapp.com/api/reservas/${this.id}`, this.reserva)
       e.target.setAttribute("readonly", true);
-      this.$store.dispatch("load-reservas");
-      this.$Progress.fail()
+      await this.$store.dispatch("load-reservas");
+      this.$Progress.finish()
     }
   }
 };

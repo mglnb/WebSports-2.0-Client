@@ -24,16 +24,12 @@
           </div>
           <div class="reserva__input-group">
             <label for="">NUMERO DE RESERVAS</label>
-            <input type="number" max="10" min="0" v-model="reserva.reservas">
+            <input type="number" max="10" min="0" v-model="reserva.quantidade">
           </div>
           <div class="reserva__input-group">
             <label for="">RESERVADO PARA</label>
             <flat-pickr :config="config" v-model="reserva.dataReservada"></flat-pickr>
           </div>
-                  <div class="reserva__input-group">
-              <label for="">QUANTIDADE</label>
-              <input type="number" v-model="reserva.quantidade">
-            </div>
           <div class="reserva__input-group">
             <label>PAGO?
             <input type="checkbox" v-model="reserva.pagamento" >
@@ -87,10 +83,7 @@
               <label for="">RESERVADO PARA</label>
               <input type="text" v-model="reserva.dataReservada">
             </div>
-            <div class="reserva__input-group">
-              <label for="">QUANTIDADE</label>
-              <input type="number" v-model="reserva.quantidade">
-            </div>
+ 
           </div>
           <div class="reserva__input-group">
             <label for="">CRIADO EM</label>
@@ -258,7 +251,7 @@ export default {
         cliente: {
           cpf: "",
           email: "",
-          nome: "", 
+          nome: "",
           saldo: ""
         },
         quantidade: '',
@@ -277,7 +270,7 @@ export default {
     return {
       config: {
         enableTime: true,
-        dateFormat: 'd-m-Y H:i',
+        dateFormat: 'Y-m-d H:i:S',
         locale: 'pt-BR'
       },
       sort: "dia",
@@ -293,7 +286,7 @@ export default {
        cliente: {
           cpf: "",
           email: "",
-          nome: "", 
+          nome: "",
           saldo: ""
         },
         quantidade: '',

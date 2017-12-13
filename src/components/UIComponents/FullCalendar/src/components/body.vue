@@ -27,7 +27,7 @@
                   }]" @click="eventClick(event,$event)">
               {{isBegin(event, day.date, day.weekDay)}}
             </p>
-            <p v-if="day.events.length > eventLimit" class="more-link" @click.stop="selectThisDay(day, $event)">
+            <p v-if="day.events.length > eventLimit" class="more-link"  @click.stop="selectThisDay(day, $event)">
               + {{day.events[day.events.length -1].cellIndex - eventLimit}} more
             </p>
           </div>
@@ -43,7 +43,7 @@
       </div>
       <div class="more-body">
         <ul class="body-list">
-          <li v-for="event in selectDay.events" v-show="event.isShow"  class="body-item" @click="eventClick(event, $event)">
+          <li v-for="event in selectDay.events" v-show="event.isShow"  :style="event.color ? 'background-color: ' + event.color : ''" class="body-item" @click="eventClick(event, $event)">
             {{event.title}}
           </li>
         </ul>
