@@ -50,7 +50,7 @@
       </div>
 -->
       <div class="col-md-12 col-xs-12">
-        <chart-card :chart-data="activityChart.data" :chart-options="activityChart.options">
+        <chart-card :chart-data="arrayChart" :chart-options="activityChart.options">
           <h4 class="title" slot="title">Reservas deste ano</h4>
          <!-- <span slot="footer">
             <i class="ti-check"></i> Data information certified</span> -->
@@ -102,7 +102,7 @@
             type: 'info',
             icon: 'ti-calendar',
             title: 'Reservas desse mês',
-            value: '+23',
+            value: '0',
             footerText: 'Atualizado agora',
             footerIcon: 'ti-reload'
           },
@@ -143,9 +143,8 @@
         activityChart: {
           data: {
             labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            series: [
-              [10, 20, 15, 18, 10, 25, 23, 40, 20, 18, 32, 18]
-            ]
+            // series: [[121,135,125,118,118,147,124,123,124,123,126,133]]
+            series: []
           },
           options: {
             seriesBarDistance: 40,
@@ -171,7 +170,13 @@
            .then(res => {
              this.statsCards[0].value = res.body.clientes;
              this.statsCards[1].value = res.body.reservas;
-             this.$Progress.finish()
+             this.statsCards[2].value = res.body.month[new Date().getMonth()].length
+             var array = []
+             Object.entries(res.body.month).forEach((value,index) => {
+               array.push(value[1].length)
+             })
+             this.activityChart.data.series.push(array)
+             this.$emit('reload-chart')
            })
            .catch(err => {
              this.statsCards.map((value, index) => {
@@ -179,11 +184,14 @@
                value.footerText = 'Erro ao carregar'
                value.footerIcon = 'ti-error'
              })
+             console.log(err)
              this.$Progress.fail();
            })
     },
     computed: {
-
+      arrayChart() {
+        return this.activityChart.data
+      }
     }
   }
 

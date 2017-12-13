@@ -101,13 +101,13 @@ export default {
       this.$Progress.start()
       await this.$http.post('//websports.herokuapp.com/api/users', this.usuario)
         .then(res => {
+          this.$store.dispatch('load-users')      
           this.$Progress.finish()
         })
         .catch(err => {
           this.$Progress.fail()
         })
         this.resetFields();
-      this.$store.dispatch('load-users')
     },
     async handleDelete(payload) {
       this.$Progress.start();

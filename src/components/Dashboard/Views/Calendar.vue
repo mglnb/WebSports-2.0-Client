@@ -34,7 +34,7 @@
       </div>
       <div class="reserva__input-group">
         <label for="">CRIADO EM</label>
-        <input type="text" readonly @keydown.enter="addReadonly($event)" @dblclick="edit($event)" v-model="reserva.created_at">
+        <input type="text" readonly v-model="reserva.created_at">
       </div>
     </div>
   </div>
@@ -43,11 +43,15 @@
 
 <script>
 import VueCalendar from "../../UIComponents/FullCalendar/src";
-import {mask} from 'vue-the-mask'
+import {
+  mask
+} from 'vue-the-mask'
 import DatePicker from 'vuejs-datepicker'
 export default {
-  created() {
-    this.$store.dispatch("load-reservas");
+  async created() {
+    await this.$store.dispatch("load-reservas");
+    this.$Progress.finish()
+
   },
   data() {
     return {
@@ -87,10 +91,10 @@ export default {
           id: element.id,
           title: `${hour} ${element["nome do cliente"]}`,
           start: `${time} ${hour}`,
-          end: `${time} ${end.toLocaleTimeString()}`
+          end: `${time} ${end.toLocaleTimeString()}`,
+          color: element.pago == '✓' ? '#00E676' : '#FF7043'
         });
       });
-      this.$Progress.finish()
       return event;
     }
   },
@@ -120,19 +124,19 @@ export default {
       e.target.removeAttribute("readonly");
     },
     async addReadonly(e) {
-      console.log(e)
+      this.$Progress.start()
       this.reserva.cliente.cpf = this.reserva.cliente.cpf.replace(/[^a-zA-Z0-9 ]/g, "")
       this.reserva.cliente.saldo = this.reserva.cliente.saldo.replace(/[^0-9 ]/g, "")
       await this.$http.put(`//websports.herokuapp.com/api/reservas/${this.id}`, this.reserva)
       e.target.setAttribute("readonly", true);
       this.$store.dispatch("load-reservas");
-
+      this.$Progress.fail()
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .comp-full-calendar {
   width: 100%;
 }
@@ -156,7 +160,8 @@ export default {
   &--active {
     animation: translateX .4s forwards;
   }
-  &--column {display: flex;
+  &--column {
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -181,7 +186,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: baseline;
-    border-bottom: 1px solid rgba(50,50,50,.1);
+    border-bottom: 1px solid rgba(50, 50, 50, .1);
     margin-bottom: 10px;
     label {
       text-align: right;
@@ -193,24 +198,30 @@ export default {
       color: #444;
       font-weight: 400;
       cursor: pointer;
+      background: #fff;
+    }
+    input[readonly] {
+      background: transparent;
+      cursor: text;
     }
   }
 }
 
 @keyframes translateX {
-    0% {
-      transform: translateX(35vw);
-    }
-    100% {
-      transform: translateX(0);
-    }
+  0% {
+    transform: translateX(35vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
+
 @keyframes translateX-reverse {
   0% {
-    transform:  translateX(0);
+    transform: translateX(0);
   }
-    100% {
-      transform:  translateX(35vw);
-    }
+  100% {
+    transform: translateX(35vw);
+  }
 }
 </style>

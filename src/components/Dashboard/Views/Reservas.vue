@@ -30,6 +30,10 @@
             <label for="">RESERVADO PARA</label>
             <flat-pickr :config="config" v-model="reserva.dataReservada"></flat-pickr>
           </div>
+                  <div class="reserva__input-group">
+              <label for="">QUANTIDADE</label>
+              <input type="number" v-model="reserva.quantidade">
+            </div>
           <div class="reserva__input-group">
             <label>PAGO?
             <input type="checkbox" v-model="reserva.pagamento" >
@@ -82,6 +86,10 @@
             <div class="reserva__input-group">
               <label for="">RESERVADO PARA</label>
               <input type="text" v-model="reserva.dataReservada">
+            </div>
+            <div class="reserva__input-group">
+              <label for="">QUANTIDADE</label>
+              <input type="number" v-model="reserva.quantidade">
             </div>
           </div>
           <div class="reserva__input-group">
@@ -250,9 +258,10 @@ export default {
         cliente: {
           cpf: "",
           email: "",
-          nome: "",
+          nome: "", 
           saldo: ""
         },
+        quantidade: '',
         dataReservada: "",
         dataPagamento: "",
         created_at: "",
@@ -281,20 +290,25 @@ export default {
       reserva_isCreate: true,
       reserva_class: "",
       reserva: {
-        cliente: {
+       cliente: {
           cpf: "",
           email: "",
-          nome: "",
+          nome: "", 
           saldo: ""
         },
+        quantidade: '',
         dataReservada: "",
         dataPagamento: "",
         created_at: "",
-        updated_at: ""
+        updated_at: "",
+        quadra_id: "",
+        pagamento_id: "",
+        reserva: "",
+        pagamento: '',
       }
-    };
+    }
   }
-};
+}
 </script>
 <style lang="scss">
 .flex {

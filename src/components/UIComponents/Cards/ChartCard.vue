@@ -57,7 +57,8 @@
     },
     data () {
       return {
-        chartId: 'no-id'
+        chartId: 'no-id',
+        chart_data: this.chartData
       }
     },
     methods: {
@@ -82,7 +83,10 @@
     },
     mounted () {
       this.updateChartId()
-      this.$nextTick(this.initChart)
+      this.$parent.$on('reload-chart',  () => {
+        this.initChart()
+        this.$Progress.finish() 
+      })
     }
   }
 
