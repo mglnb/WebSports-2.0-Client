@@ -106,11 +106,6 @@ export default {
           <div class="icon2">
             <input class="input" type="password" placeholder="Senha" v-model="login.password" >
           </div>
-          <label class="anim">
-            <input type="checkbox" class="checkbox">
-            <span>Lembrar-me</span>
-            <a href="#">Esqueceu sua senha?</a>
-          </label>
           <div class="clear"></div>
           <input type="submit" class="button is-primary" v-text="labels.button">
         </form>
